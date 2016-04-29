@@ -5653,6 +5653,7 @@ Elm.Main.make = function (_elm) {
                  cycled,
                  A2($Maybe.withDefault,_U.list([]),$List.tail(cycled))));
               }())
+              ,A2($Graphics$Collage.move,toXY(rayPosition),A2($Graphics$Collage.filled,$Color.red,$Graphics$Collage.circle(5)))
               ,$Graphics$Collage.group(A2($List.map,drawLine(wallLineStyle),world))
               ,A2($Graphics$Collage.move,
               {ctor: "_Tuple2",_0: 0,_1: $Basics.toFloat(_p16) / 2 - 20},
