@@ -5637,10 +5637,7 @@ Elm.Main.make = function (_elm) {
       return A3($Graphics$Collage.collage,
       _p17,
       _p16,
-      _U.list([A2($Graphics$Collage.move,
-              {ctor: "_Tuple2",_0: 0,_1: $Basics.toFloat(_p16) / 2 - 20},
-              $Graphics$Collage.text(A2($Text.link,"http://ncase.me/sight-and-light/",$Text.fromString("Based on this excellent tutorial."))))
-              ,$Graphics$Collage.group(function () {
+      _U.list([$Graphics$Collage.group(function () {
                  var solutions = A2($List.sortBy,
                  function (_p15) {
                     return function (_) {
@@ -5656,7 +5653,12 @@ Elm.Main.make = function (_elm) {
                  cycled,
                  A2($Maybe.withDefault,_U.list([]),$List.tail(cycled))));
               }())
-              ,$Graphics$Collage.group(A2($List.map,drawLine(wallLineStyle),world))]));
+              ,$Graphics$Collage.group(A2($List.map,drawLine(wallLineStyle),world))
+              ,A2($Graphics$Collage.move,
+              {ctor: "_Tuple2",_0: 0,_1: $Basics.toFloat(_p16) / 2 - 20},
+              $Graphics$Collage.text($Text.concat(_U.list([$Text.fromString("A raycasting hack in Elm, based on ")
+                                                          ,A2($Text.link,"http://ncase.me/sight-and-light",$Text.fromString("this excellent tutorial"))
+                                                          ,$Text.fromString(".")]))))]));
    });
    var main = A3($Signal.map2,view,$Window.dimensions,$Mouse.position);
    var Vector = F2(function (a,b) {    return {length: a,angle: b};});
