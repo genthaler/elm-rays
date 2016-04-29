@@ -5636,21 +5636,7 @@ Elm.Main.make = function (_elm) {
       var rayPosition = {x: $Basics.toFloat(_p13._0) - w / 2,y: h / 2 - $Basics.toFloat(_p13._1)};
       return A2($Graphics$Element.flow,
       $Graphics$Element.down,
-      _U.list([A4($Graphics$Element.container,
-              _p17,
-              30,
-              $Graphics$Element.middle,
-              $Graphics$Element.centered($Text.concat(_U.list([$Text.fromString("A raycasting hack in ")
-                                                              ,A2($Text.link,"http://elm-lang.org/",$Text.fromString("Elm"))
-                                                              ,$Text.fromString(", based on ")
-                                                              ,A2($Text.link,"http://ncase.me/sight-and-light",$Text.fromString("this excellent tutorial"))
-                                                              ,$Text.fromString(".")]))))
-              ,A4($Graphics$Element.container,
-              _p17,
-              30,
-              $Graphics$Element.middle,
-              $Graphics$Element.centered(A2($Text.link,"https://github.com/krisajenkins/elm-rays",$Text.fromString("Source Code"))))
-              ,A3($Graphics$Collage.collage,
+      _U.list([A3($Graphics$Collage.collage,
               _p17,
               _p16,
               _U.list([$Graphics$Collage.group(function () {
@@ -5670,7 +5656,21 @@ Elm.Main.make = function (_elm) {
                          A2($Maybe.withDefault,_U.list([]),$List.tail(cycled))));
                       }())
                       ,A2($Graphics$Collage.move,toXY(rayPosition),A2($Graphics$Collage.filled,$Color.red,$Graphics$Collage.circle(5)))
-                      ,$Graphics$Collage.group(A2($List.map,drawLine(wallLineStyle),world))]))]));
+                      ,$Graphics$Collage.group(A2($List.map,drawLine(wallLineStyle),world))]))
+              ,A4($Graphics$Element.container,
+              _p17,
+              30,
+              $Graphics$Element.middle,
+              $Graphics$Element.centered($Text.concat(_U.list([$Text.fromString("A raycasting hack in ")
+                                                              ,A2($Text.link,"http://elm-lang.org/",$Text.fromString("Elm"))
+                                                              ,$Text.fromString(", based on ")
+                                                              ,A2($Text.link,"http://ncase.me/sight-and-light",$Text.fromString("this excellent tutorial"))
+                                                              ,$Text.fromString(".")]))))
+              ,A4($Graphics$Element.container,
+              _p17,
+              30,
+              $Graphics$Element.middle,
+              $Graphics$Element.centered(A2($Text.link,"https://github.com/krisajenkins/elm-rays",$Text.fromString("Source Code"))))]));
    });
    var main = A3($Signal.map2,view,$Window.dimensions,$Mouse.position);
    var Vector = F2(function (a,b) {    return {length: a,angle: b};});
