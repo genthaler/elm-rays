@@ -5546,16 +5546,21 @@ Elm.Main.make = function (_elm) {
    $Mouse = Elm.Mouse.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
+   $Text = Elm.Text.make(_elm),
    $Window = Elm.Window.make(_elm);
    var _op = {};
+   var wallLineStyle = _U.update($Graphics$Collage.defaultLine,{width: 8,cap: $Graphics$Collage.Round});
+   var rayColor = $Color.lightYellow;
    var world = _U.list([{position: {x: -300,y: -300},vector: {length: 600,angle: $Basics.degrees(0)}}
                        ,{position: {x: 300,y: -300},vector: {length: 600,angle: $Basics.degrees(90)}}
                        ,{position: {x: -300,y: -300},vector: {length: 600,angle: $Basics.degrees(90)}}
                        ,{position: {x: 300,y: 300},vector: {length: 600,angle: $Basics.degrees(180)}}
                        ,{position: {x: 100,y: 100},vector: {length: 50,angle: $Basics.degrees(315)}}
-                       ,{position: {x: -120,y: 100},vector: {length: 50,angle: $Basics.degrees(250)}}
+                       ,{position: {x: -80,y: 100},vector: {length: 50,angle: $Basics.degrees(290)}}
                        ,{position: {x: -200,y: 180},vector: {length: 150,angle: $Basics.degrees(250)}}
-                       ,{position: {x: 150,y: -100},vector: {length: 120,angle: $Basics.degrees(235)}}]);
+                       ,{position: {x: 150,y: -100},vector: {length: 120,angle: $Basics.degrees(235)}}
+                       ,{position: {x: -230,y: -250},vector: {length: 300,angle: $Basics.degrees(70)}}
+                       ,{position: {x: 0,y: -150},vector: {length: 300,angle: $Basics.degrees(30)}}]);
    var vectorBetween = F2(function (p1,p2) {
       var dy = p2.y - p1.y;
       var dx = p2.x - p1.x;
@@ -5572,11 +5577,6 @@ Elm.Main.make = function (_elm) {
       return {x: line.position.x + dx,y: line.position.y + dy};
    };
    var start = function (line) {    return line.position;};
-   var drawLine = F2(function (lineStyle,line) {
-      var lineEnd = toXY(end(line));
-      var lineStart = toXY(start(line));
-      return $Graphics$Collage.group(_U.list([A2($Graphics$Collage.traced,lineStyle,A2($Graphics$Collage.segment,lineStart,lineEnd))]));
-   });
    var intersect = F2(function (r,s) {
       var norms = function (line) {    return {ctor: "_Tuple2",_0: $Basics.cos(line.vector.angle),_1: $Basics.sin(line.vector.angle)};};
       var _p1 = norms(r);
@@ -5614,23 +5614,49 @@ Elm.Main.make = function (_elm) {
                      ,A2(adjustAngle,$Basics.degrees(-0.5),rayToEnd)]);
    });
    var solveRays = function (rayStart) {    return A2($List.filterMap,curtail,A2($List.concatMap,toRays(rayStart),world));};
-   var rayLineStyle = _U.update($Graphics$Collage.defaultLine,{width: 2,color: A3($Color.rgb,220,0,0)});
-   var wallLineStyle = _U.update($Graphics$Collage.defaultLine,{width: 4});
-   var view = F2(function (_p7,_p6) {
-      var _p8 = _p7;
-      var _p12 = _p8._0;
-      var _p11 = _p8._1;
-      var _p9 = _p6;
-      var _p10 = {ctor: "_Tuple2",_0: $Basics.toFloat(_p12),_1: $Basics.toFloat(_p11)};
-      var w = _p10._0;
-      var h = _p10._1;
-      var rayPosition = {x: $Basics.toFloat(_p9._0) - w / 2,y: h / 2 - $Basics.toFloat(_p9._1)};
+   var drawLine = F2(function (lineStyle,line) {
+      var lineEnd = toXY(end(line));
+      var lineStart = toXY(start(line));
+      return A2($Graphics$Collage.traced,lineStyle,A2($Graphics$Collage.segment,lineStart,lineEnd));
+   });
+   var drawTriangles = F2(function (color,_p6) {
+      var _p7 = _p6;
+      var _p9 = _p7._1;
+      var _p8 = _p7._0;
+      return A2($Graphics$Collage.filled,color,$Graphics$Collage.polygon(A2($List.map,toXY,_U.list([start(_p8),end(_p8),end(_p9),start(_p9)]))));
+   });
+   var view = F2(function (_p11,_p10) {
+      var _p12 = _p11;
+      var _p17 = _p12._0;
+      var _p16 = _p12._1;
+      var _p13 = _p10;
+      var _p14 = {ctor: "_Tuple2",_0: $Basics.toFloat(_p17),_1: $Basics.toFloat(_p16)};
+      var w = _p14._0;
+      var h = _p14._1;
+      var rayPosition = {x: $Basics.toFloat(_p13._0) - w / 2,y: h / 2 - $Basics.toFloat(_p13._1)};
       return A3($Graphics$Collage.collage,
-      _p12,
-      _p11,
-      _U.list([A2($Graphics$Collage.move,toXY(rayPosition),A2($Graphics$Collage.filled,A3($Color.rgb,220,0,0),$Graphics$Collage.circle(5)))
-              ,$Graphics$Collage.group(A2($List.map,drawLine($Graphics$Collage.defaultLine),world))
-              ,$Graphics$Collage.group(A2($List.map,drawLine(rayLineStyle),solveRays(rayPosition)))]));
+      _p17,
+      _p16,
+      _U.list([A2($Graphics$Collage.move,
+              {ctor: "_Tuple2",_0: 0,_1: $Basics.toFloat(_p16) / 2 - 20},
+              $Graphics$Collage.text(A2($Text.link,"http://ncase.me/sight-and-light/",$Text.fromString("Based on this excellent tutorial."))))
+              ,$Graphics$Collage.group(function () {
+                 var solutions = A2($List.sortBy,
+                 function (_p15) {
+                    return function (_) {
+                       return _.angle;
+                    }(function (_) {    return _.vector;}(_p15));
+                 },
+                 solveRays(rayPosition));
+                 var cycled = A2($Basics._op["++"],solutions,A2($List.take,1,solutions));
+                 return A2($List.map,
+                 drawTriangles(rayColor),
+                 A3($List.map2,
+                 F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};}),
+                 cycled,
+                 A2($Maybe.withDefault,_U.list([]),$List.tail(cycled))));
+              }())
+              ,$Graphics$Collage.group(A2($List.map,drawLine(wallLineStyle),world))]));
    });
    var main = A3($Signal.map2,view,$Window.dimensions,$Mouse.position);
    var Vector = F2(function (a,b) {    return {length: a,angle: b};});
@@ -5640,21 +5666,22 @@ Elm.Main.make = function (_elm) {
                              ,Line: Line
                              ,Position: Position
                              ,Vector: Vector
-                             ,view: view
-                             ,wallLineStyle: wallLineStyle
-                             ,rayLineStyle: rayLineStyle
                              ,start: start
                              ,end: end
                              ,toXY: toXY
-                             ,drawLine: drawLine
+                             ,withLength: withLength
+                             ,adjustAngle: adjustAngle
+                             ,lineBetween: lineBetween
+                             ,vectorBetween: vectorBetween
                              ,solveRays: solveRays
                              ,curtail: curtail
                              ,intersect: intersect
-                             ,withLength: withLength
-                             ,adjustAngle: adjustAngle
                              ,toRays: toRays
-                             ,lineBetween: lineBetween
-                             ,vectorBetween: vectorBetween
+                             ,view: view
+                             ,drawLine: drawLine
+                             ,drawTriangles: drawTriangles
                              ,world: world
+                             ,rayColor: rayColor
+                             ,wallLineStyle: wallLineStyle
                              ,main: main};
 };</script></head><body><script type="text/javascript">Elm.fullscreen(Elm.Main)</script></body></html>
