@@ -6,7 +6,7 @@
                '(lambda ()
                   (interactive)
                   (require 'magit)
-                  (let ((compile-command (format "cd %s ; elm make --output=index.html --warn --yes Main.elm"
+                  (let ((compile-command (format "cd %s ; elm make --output=index.html --warn --yes src/Main.elm"
                                                  (magit-toplevel))))
                     (save-buffer)
                     (compile compile-command))))))
