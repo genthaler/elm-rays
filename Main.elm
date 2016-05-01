@@ -48,8 +48,8 @@ end line =
     ( dx, dy ) =
       fromPolar ( line.vector.length, line.vector.angle )
   in
-    { x = (line.position.x + dx)
-    , y = (line.position.y + dy)
+    { x = line.position.x + dx
+    , y = line.position.y + dy
     }
 
 
@@ -139,7 +139,7 @@ intersect r s =
         / ((s_dx * r_dy) - (s_dy * r_dx))
 
     rm =
-      ((s_px - r_px + (s_dx * sm)) / r_dx)
+      (s_px - r_px + (s_dx * sm)) / r_dx
   in
     if isNaN sm || isNaN rm then
       Nothing
