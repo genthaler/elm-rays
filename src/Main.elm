@@ -1,13 +1,18 @@
-module Main (..) where
+module Main exposing (..)
 
 {- Oh fudge, you're looking at the source code. -}
 
+import Task
+import Collage exposing (..)
 import Color exposing (Color)
-import Graphics.Collage exposing (..)
-import Graphics.Element exposing (Element, flow, down, container, centered, middle)
+import Element exposing (Element, flow, down, container, centered, middle)
+import Html exposing (Html)
+import Html.App
 import Mouse
+import Platform.Cmd as Cmd
+import Platform.Sub as Sub
 import Text exposing (link, fromString)
-import Window
+import Window exposing (Size)
 
 
 ------------------------------------------------------------
@@ -175,52 +180,60 @@ toRays position line =
 ------------------------------------------------------------
 
 
-view : Walls -> ( Int, Int ) -> ( Int, Int ) -> Element
-view walls ( w', h' ) ( x', y' ) =
-  let
-    ( w, h ) =
-      ( toFloat w', toFloat h' )
+view : Model -> Html Msg
+view model =
+  case ( model.size, model.mouse ) of
+    ( Just size, Just position ) ->
+      element model.walls
+        ( size.width, size.height )
+        ( toFloat position.x, toFloat position.y )
+        |> Element.toHtml
 
+    _ ->
+      Html.text "Initializing."
+
+
+element : Walls -> ( Int, Int ) -> ( Float, Float ) -> Element
+element walls ( width, height ) ( x, y ) =
+  let
     rayPosition =
-      { x = toFloat x' - (w / 2)
-      , y = (h / 2) - toFloat y'
+      { x = x - ((toFloat width) / 2.0)
+      , y = ((toFloat height) / 2.0) - y
       }
   in
-    flow
-      down
-      [ collage
-          w'
-          h'
-          [ group
-              (let
-                solutions =
-                  solveRays walls rayPosition
-                    |> List.sortBy (.vector >> .angle)
+    [ collage width
+        height
+        [ group
+            (let
+              solutions =
+                solveRays walls rayPosition
+                  |> List.sortBy (.vector >> .angle)
 
-                cycled =
-                  solutions ++ (List.take 1 solutions)
-               in
-                List.map2 (,) cycled (List.tail cycled |> Maybe.withDefault [])
-                  |> List.map (drawTriangles rayColor)
-              )
-          , circle 5
-              |> filled Color.red
-              |> move (toXY rayPosition)
-          , group (List.map (drawLine wallLineStyle) walls)
-          ]
-      , [ fromString "A raycasting hack in "
-        , link "http://elm-lang.org/" (fromString "Elm")
-        , fromString ", based on "
-        , link "http://ncase.me/sight-and-light" (fromString "this excellent tutorial")
-        , fromString "."
+              cycled =
+                solutions ++ (List.take 1 solutions)
+             in
+              List.map2 (,) cycled (List.tail cycled |> Maybe.withDefault [])
+                |> List.map (drawTriangles rayColor)
+            )
+        , circle 5
+            |> filled Color.red
+            |> move (toXY rayPosition)
+        , group (List.map (drawLine wallLineStyle) walls)
         ]
-          |> Text.concat
-          |> centered
-          |> container w' 30 middle
-      , link "https://github.com/krisajenkins/elm-rays" (fromString "Source Code")
-          |> centered
-          |> container w' 30 middle
+    , [ fromString "A raycasting hack in "
+      , link "http://elm-lang.org/" (fromString "Elm")
+      , fromString ", based on "
+      , link "http://ncase.me/sight-and-light" (fromString "this excellent tutorial")
+      , fromString "."
       ]
+        |> Text.concat
+        |> centered
+        |> container width 30 middle
+    , link "https://github.com/krisajenkins/elm-rays" (fromString "Source Code")
+        |> centered
+        |> container width 30 middle
+    ]
+      |> flow down
 
 
 drawLine : LineStyle -> Line -> Form
@@ -254,21 +267,6 @@ drawTriangles color ( a, b ) =
 ------------------------------------------------------------
 
 
-initialWalls : Walls
-initialWalls =
-  [ { position = { x = -300, y = -300 }, vector = { length = 600, angle = degrees 0 } }
-  , { position = { x = 300, y = -300 }, vector = { length = 600, angle = degrees 90 } }
-  , { position = { x = -300, y = -300 }, vector = { length = 600, angle = degrees 90 } }
-  , { position = { x = 300, y = 300 }, vector = { length = 600, angle = degrees 180 } }
-  , { position = { x = 100, y = 100 }, vector = { length = 50, angle = degrees 315 } }
-  , { position = { x = -80, y = 100 }, vector = { length = 50, angle = degrees 290 } }
-  , { position = { x = -200, y = 180 }, vector = { length = 150, angle = degrees 250 } }
-  , { position = { x = 150, y = -100 }, vector = { length = 120, angle = degrees 235 } }
-  , { position = { x = -230, y = -250 }, vector = { length = 300, angle = degrees 70 } }
-  , { position = { x = 0, y = -150 }, vector = { length = 300, angle = degrees 30 } }
-  ]
-
-
 rayColor : Color
 rayColor =
   Color.lightYellow
@@ -282,9 +280,74 @@ wallLineStyle =
   }
 
 
-main : Signal Element
+type alias Model =
+  { walls : Walls
+  , mouse : Maybe Mouse.Position
+  , size : Maybe Size
+  }
+
+
+init : ( Model, Cmd Msg )
+init =
+  ( { walls =
+        [ { position = { x = -300, y = -300 }, vector = { length = 600, angle = degrees 0 } }
+        , { position = { x = 300, y = -300 }, vector = { length = 600, angle = degrees 90 } }
+        , { position = { x = -300, y = -300 }, vector = { length = 600, angle = degrees 90 } }
+        , { position = { x = 300, y = 300 }, vector = { length = 600, angle = degrees 180 } }
+        , { position = { x = 100, y = 100 }, vector = { length = 50, angle = degrees 315 } }
+        , { position = { x = -80, y = 100 }, vector = { length = 50, angle = degrees 290 } }
+        , { position = { x = -200, y = 180 }, vector = { length = 150, angle = degrees 250 } }
+        , { position = { x = 150, y = -100 }, vector = { length = 120, angle = degrees 235 } }
+        , { position = { x = -230, y = -250 }, vector = { length = 300, angle = degrees 70 } }
+        , { position = { x = 0, y = -150 }, vector = { length = 300, angle = degrees 30 } }
+        ]
+    , size = Nothing
+    , mouse = Nothing
+    }
+  , Cmd.batch
+      [ Task.perform Error Resize Window.size
+      , Task.perform Error Resize Window.size
+      ]
+  )
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+  case msg of
+    Resize size ->
+      ( { model | size = Just size }
+      , Cmd.none
+      )
+
+    Mouse mouse ->
+      ( { model | mouse = Just mouse }
+      , Cmd.none
+      )
+
+    Error _ ->
+      ( model
+      , Cmd.none
+      )
+
+
+type Msg
+  = Resize Size
+  | Mouse Mouse.Position
+  | Error Never
+
+
+main : Program Never
 main =
-  Signal.map2
-    (view initialWalls)
-    Window.dimensions
-    Mouse.position
+  Html.App.program
+    { init = init
+    , update = update
+    , view = view
+    , subscriptions =
+        (always
+          (Sub.batch
+            [ Mouse.moves Mouse
+            , Window.resizes Resize
+            ]
+          )
+        )
+    }
