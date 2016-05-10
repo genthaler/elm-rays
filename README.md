@@ -8,7 +8,7 @@ Written for April 2016's [West London Hack Night](http://www.meetup.com/West-Lon
 
 ## Building
 
-You'll need Elm 0.16. Then call:
+You'll need Elm 0.17. Then call:
 
 ```
 $ elm-make --warn --output=index.html src/Main.elm
