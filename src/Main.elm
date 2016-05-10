@@ -304,10 +304,7 @@ init =
     , size = Nothing
     , mouse = Nothing
     }
-  , Cmd.batch
-      [ Task.perform Error Resize Window.size
-      , Task.perform Error Resize Window.size
-      ]
+  , Task.perform Error Resize Window.size
   )
 
 
