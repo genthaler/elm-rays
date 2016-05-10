@@ -1,6 +1,6 @@
 # Raycasting
 
-Written for April 2016's [West London Hack Night](http://www.meetup.com/West-London-Hack-Night/).
+Written for April 2016's [West London Hack Night](http://www.meetup.com/West-London-Hack-Night/) with [James Deery](https://github.com/derkyjadex) and Peter Jones.
 
 [See it live here](http://krisajenkins.github.io/elm-rays/).
 
