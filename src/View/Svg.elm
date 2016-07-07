@@ -62,10 +62,10 @@ drawLine line =
             Vectors.end line
     in
         Svg.line
-            [ x1 <| toString lineStart.x
-            , y1 <| toString lineStart.y
-            , x2 <| toString lineEnd.x
-            , y2 <| toString lineEnd.y
+            [ x1 (toString lineStart.x)
+            , y1 (toString lineStart.y)
+            , x2 (toString lineEnd.x)
+            , y2 (toString lineEnd.y)
             , stroke "black"
             , strokeWidth "5"
             , strokeLinecap "round"
@@ -76,7 +76,7 @@ drawLine line =
 drawTriangle : ( Line, Line ) -> Svg msg
 drawTriangle ( a, b ) =
     let
-        toPair point =
+        formatPoint point =
             toString point.x ++ "," ++ toString point.y
     in
         polygon
@@ -84,12 +84,13 @@ drawTriangle ( a, b ) =
             , stroke "gold"
             , points
                 (String.join " "
-                    <| List.map toPair
+                    (List.map formatPoint
                         [ Vectors.start a
                         , Vectors.end a
                         , Vectors.end b
                         , Vectors.start b
                         ]
+                    )
                 )
             ]
             []
@@ -98,8 +99,8 @@ drawTriangle ( a, b ) =
 drawCursor : Mouse.Position -> Svg msg
 drawCursor position =
     circle
-        [ cx <| toString position.x
-        , cy <| toString position.y
+        [ cx (toString position.x)
+        , cy (toString position.y)
         , r "5"
         , fill "red"
         ]

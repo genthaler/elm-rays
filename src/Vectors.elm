@@ -1,4 +1,4 @@
-module Vectors exposing (Line, Position, start, end, lineBetween, adjustAngle, withLength, components)
+module Vectors exposing (..)
 
 
 type alias Position =
@@ -51,13 +51,13 @@ vectorBetween p1 p2 =
         dy =
             p2.y - p1.y
     in
-        { length = sqrt (dx * dx + dy * dy)
-        , angle = atan2 (p2.y - p1.y) (p2.x - p1.x)
+        { length = sqrt (dx ^ 2 + dy ^ 2)
+        , angle = atan2 dy dx
         }
 
 
-adjustAngle : Float -> Line -> Line
-adjustAngle delta line =
+addToAngle : Float -> Line -> Line
+addToAngle delta line =
     let
         vector =
             line.vector

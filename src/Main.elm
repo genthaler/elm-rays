@@ -15,7 +15,7 @@ import View exposing (..)
 main : Program Never
 main =
     Html.App.program
-        { init = State.initialState
+        { init = ( State.initialModel, State.initialCmd )
         , subscriptions = State.subscriptions
         , update = State.update
         , view = View.root

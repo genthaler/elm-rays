@@ -24,10 +24,10 @@ toRays position line =
         delta =
             degrees 0.1
     in
-        [ adjustAngle delta rayToStart
-        , adjustAngle (delta * -1) rayToStart
-        , adjustAngle delta rayToEnd
-        , adjustAngle (delta * -1) rayToEnd
+        [ addToAngle delta rayToStart
+        , addToAngle (delta * -1) rayToStart
+        , addToAngle delta rayToEnd
+        , addToAngle (delta * -1) rayToEnd
         ]
 
 
