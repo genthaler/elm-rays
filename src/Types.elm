@@ -1,5 +1,6 @@
 module Types exposing (Walls, Model, Msg(..), solveRays)
 
+import List.Extra
 import Mouse
 import Vectors exposing (..)
 
@@ -48,8 +49,7 @@ curtail : Walls -> Line -> Maybe Line
 curtail walls line =
     walls
         |> List.filterMap (intersect line)
-        |> List.sortBy (.vector >> .length)
-        |> List.head
+        |> List.Extra.minimumBy (.vector >> .length)
 
 
 intersect : Line -> Line -> Maybe Line
