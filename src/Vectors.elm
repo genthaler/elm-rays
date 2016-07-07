@@ -1,4 +1,4 @@
-module Vectors exposing (Line, Position, lineBetween, start, end, adjustAngle, intersect)
+module Vectors exposing (Line, Position, start, end, lineBetween, adjustAngle, withLength, components)
 
 
 type alias Position =
@@ -35,29 +35,6 @@ end line =
         }
 
 
-toXY : Position -> ( Float, Float )
-toXY p =
-    ( p.x, p.y )
-
-
-withLength : Float -> Line -> Line
-withLength length line =
-    let
-        vector =
-            line.vector
-    in
-        { line | vector = { vector | length = length } }
-
-
-adjustAngle : Float -> Line -> Line
-adjustAngle delta line =
-    let
-        vector =
-            line.vector
-    in
-        { line | vector = { vector | angle = vector.angle + delta } }
-
-
 lineBetween : Position -> Position -> Line
 lineBetween from to =
     { position = from
@@ -79,42 +56,26 @@ vectorBetween p1 p2 =
         }
 
 
-norms : Line -> ( Float, Float )
-norms line =
-    ( cos line.vector.angle
-    , sin line.vector.angle
-    )
-
-
-intersect : Line -> Line -> Maybe Line
-intersect r s =
+adjustAngle : Float -> Line -> Line
+adjustAngle delta line =
     let
-        ( r_px, r_py ) =
-            toXY (start r)
-
-        ( s_px, s_py ) =
-            toXY (start s)
-
-        ( r_dx, r_dy ) =
-            norms r
-
-        ( s_dx, s_dy ) =
-            norms s
-
-        sm =
-            ((r_px * r_dy) - (r_py * r_dx) + (s_py * r_dx) - (s_px * r_dy))
-                / ((s_dx * r_dy) - (s_dy * r_dx))
-
-        rm =
-            (s_px - r_px + (s_dx * sm)) / r_dx
+        vector =
+            line.vector
     in
-        if isNaN sm || isNaN rm then
-            Nothing
-        else if sm < 0 then
-            Nothing
-        else if s.vector.length < sm then
-            Nothing
-        else if rm < 0 then
-            Nothing
-        else
-            Just (withLength rm r)
+        { line | vector = { vector | angle = vector.angle + delta } }
+
+
+components : Line -> { dx : Float, dy : Float }
+components line =
+    { dx = cos line.vector.angle
+    , dy = sin line.vector.angle
+    }
+
+
+withLength : Float -> Line -> Line
+withLength length line =
+    let
+        vector =
+            line.vector
+    in
+        { line | vector = { vector | length = length } }
