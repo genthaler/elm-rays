@@ -8,15 +8,15 @@ import View.Svg
 
 root : Model -> Html Msg
 root model =
-    case ( model.size, model.mouse ) of
-        ( Just size, Just position ) ->
-            div []
-                [ View.Svg.root model.walls size position
-                , copy
-                ]
+    div []
+        [ case ( model.size, model.mouse ) of
+            ( Just size, Just position ) ->
+                View.Svg.root model.walls size position
 
-        _ ->
-            Html.text "Initializing."
+            _ ->
+                Html.text "Initializing."
+        , copy
+        ]
 
 
 copy : Html msg
