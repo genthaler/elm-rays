@@ -18,10 +18,10 @@ toRays position line =
         rayToEnd =
             lineBetween position (end line)
     in
-        [ adjustAngle (degrees 0.5) rayToStart
-        , adjustAngle (degrees -0.5) rayToStart
-        , adjustAngle (degrees 0.5) rayToEnd
-        , adjustAngle (degrees -0.5) rayToEnd
+        [ adjustAngle (degrees 0.1) rayToStart
+        , adjustAngle (degrees -0.1) rayToStart
+        , adjustAngle (degrees 0.1) rayToEnd
+        , adjustAngle (degrees -0.1) rayToEnd
         ]
 
 
