@@ -2,6 +2,7 @@ module View.Svg exposing (root)
 
 import Html exposing (Html)
 import Mouse
+import Raycasting
 import String
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
@@ -33,7 +34,7 @@ neighbours xs =
 
 drawRays : Walls -> Mouse.Position -> Svg msg
 drawRays walls position =
-    solveRays walls
+    Raycasting.solveRays walls
         { x = toFloat position.x
         , y = toFloat position.y
         }
