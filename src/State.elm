@@ -8,6 +8,11 @@ import Types exposing (..)
 import Window exposing (Size)
 
 
+initialWindowSize : Cmd Msg
+initialWindowSize =
+    Task.perform Error Resize Window.size
+
+
 initialState : ( Model, Cmd Msg )
 initialState =
     ( { walls =
@@ -25,7 +30,7 @@ initialState =
       , size = Nothing
       , mouse = Nothing
       }
-    , Task.perform Error Resize Window.size
+    , initialWindowSize
     )
 
 
