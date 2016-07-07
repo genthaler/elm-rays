@@ -1,4 +1,4 @@
-module Types exposing (..)
+module Types exposing (Walls, Model, Msg(..), solveRays)
 
 import Mouse
 import Vectors exposing (..)
@@ -6,6 +6,23 @@ import Vectors exposing (..)
 
 type alias Walls =
     List Line
+
+
+type alias Model =
+    { walls : Walls
+    , mouse : Maybe Mouse.Position
+    }
+
+
+type Msg
+    = Mouse Mouse.Position
+
+
+solveRays : Walls -> Position -> List Line
+solveRays walls rayStart =
+    walls
+        |> List.concatMap (toRays rayStart)
+        |> List.filterMap (curtail walls)
 
 
 toRays : Position -> Line -> List Line
@@ -24,26 +41,9 @@ toRays position line =
         ]
 
 
-solveRays : Walls -> Position -> List Line
-solveRays walls rayStart =
-    walls
-        |> List.concatMap (toRays rayStart)
-        |> List.filterMap (curtail walls)
-
-
 curtail : Walls -> Line -> Maybe Line
 curtail walls line =
     walls
         |> List.filterMap (intersect line)
         |> List.sortBy (.vector >> .length)
         |> List.head
-
-
-type alias Model =
-    { walls : Walls
-    , mouse : Maybe Mouse.Position
-    }
-
-
-type Msg
-    = Mouse Mouse.Position

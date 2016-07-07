@@ -1,4 +1,4 @@
-module Vectors exposing (Line, Position, lineBetween, start, end, adjustAngle, intersect, toXY)
+module Vectors exposing (Line, Position, lineBetween, start, end, adjustAngle, intersect)
 
 
 type alias Position =

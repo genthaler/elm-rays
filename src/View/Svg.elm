@@ -52,10 +52,10 @@ drawWalls walls =
 drawLine : Line -> Svg msg
 drawLine line =
     Svg.line
-        [ x1 <| toString <| fst <| toXY <| Vectors.start line
-        , y1 <| toString <| snd <| toXY <| Vectors.start line
-        , x2 <| toString <| fst <| toXY <| Vectors.end line
-        , y2 <| toString <| snd <| toXY <| Vectors.end line
+        [ x1 <| toString <| .x <| Vectors.start line
+        , y1 <| toString <| .y <| Vectors.start line
+        , x2 <| toString <| .x <| Vectors.end line
+        , y2 <| toString <| .y <| Vectors.end line
         , stroke "black"
         , strokeWidth "5"
         , strokeLinecap "round"
@@ -66,15 +66,15 @@ drawLine line =
 drawTriangle : ( Line, Line ) -> Svg msg
 drawTriangle ( a, b ) =
     let
-        toPair ( x, y ) =
-            toString x ++ "," ++ toString y
+        toPair point =
+            toString point.x ++ "," ++ toString point.y
     in
         polygon
             [ fill "#fce64e"
             , stroke "#fce64e"
             , points
                 (String.join " "
-                    <| List.map (toXY >> toPair)
+                    <| List.map toPair
                     <| [ Vectors.start a
                        , Vectors.end a
                        , Vectors.end b
