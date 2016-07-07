@@ -16,16 +16,16 @@ initialWindowSize =
 initialState : ( Model, Cmd Msg )
 initialState =
     ( { walls =
-            [ { position = { x = -300, y = -300 }, vector = { length = 600, angle = degrees 0 } }
-            , { position = { x = 300, y = -300 }, vector = { length = 600, angle = degrees 90 } }
-            , { position = { x = -300, y = -300 }, vector = { length = 600, angle = degrees 90 } }
-            , { position = { x = 300, y = 300 }, vector = { length = 600, angle = degrees 180 } }
-            , { position = { x = 100, y = 100 }, vector = { length = 50, angle = degrees 315 } }
-            , { position = { x = -80, y = 100 }, vector = { length = 50, angle = degrees 290 } }
-            , { position = { x = -200, y = 180 }, vector = { length = 150, angle = degrees 250 } }
-            , { position = { x = 150, y = -100 }, vector = { length = 120, angle = degrees 235 } }
-            , { position = { x = -230, y = -250 }, vector = { length = 300, angle = degrees 70 } }
-            , { position = { x = 0, y = -150 }, vector = { length = 300, angle = degrees 30 } }
+            [ { position = { x = 0, y = 0 }, vector = { length = 600, angle = degrees 0 } }
+            , { position = { x = 0, y = 600 }, vector = { length = 600, angle = degrees 0 } }
+            , { position = { x = 0, y = 0 }, vector = { length = 600, angle = degrees 90 } }
+            , { position = { x = 600, y = 0 }, vector = { length = 600, angle = degrees 90 } }
+            , { position = { x = 400, y = 400 }, vector = { length = 50, angle = degrees 315 } }
+            , { position = { x = 220, y = 400 }, vector = { length = 50, angle = degrees 290 } }
+            , { position = { x = 100, y = 480 }, vector = { length = 150, angle = degrees 250 } }
+            , { position = { x = 450, y = 200 }, vector = { length = 120, angle = degrees 235 } }
+            , { position = { x = 70, y = 50 }, vector = { length = 300, angle = degrees 70 } }
+            , { position = { x = 300, y = 150 }, vector = { length = 300, angle = degrees 30 } }
             ]
       , size = Nothing
       , mouse = Nothing
