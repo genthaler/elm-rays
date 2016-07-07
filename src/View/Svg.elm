@@ -7,11 +7,10 @@ import Svg exposing (..)
 import Svg.Attributes exposing (..)
 import Types exposing (..)
 import Vectors exposing (..)
-import Window
 
 
-root : Walls -> Window.Size -> Mouse.Position -> Html msg
-root walls size position =
+root : Walls -> Mouse.Position -> Html msg
+root walls position =
     svg
         [ width "600"
         , height "600"

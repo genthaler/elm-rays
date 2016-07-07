@@ -2,7 +2,6 @@ module Types exposing (..)
 
 import Mouse
 import Vectors exposing (..)
-import Window
 
 
 type alias Walls =
@@ -43,11 +42,8 @@ curtail walls line =
 type alias Model =
     { walls : Walls
     , mouse : Maybe Mouse.Position
-    , size : Maybe Window.Size
     }
 
 
 type Msg
     = Mouse Mouse.Position
-    | Resize Window.Size
-    | Error Never

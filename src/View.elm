@@ -9,9 +9,9 @@ import View.Svg
 root : Model -> Html Msg
 root model =
     div []
-        [ case ( model.size, model.mouse ) of
-            ( Just size, Just position ) ->
-                View.Svg.root model.walls size position
+        [ case model.mouse of
+            Just position ->
+                View.Svg.root model.walls position
 
             _ ->
                 Html.text "Initializing."
