@@ -33,11 +33,14 @@ toRays position line =
 
         rayToEnd =
             lineBetween position (end line)
+
+        delta =
+            degrees 0.1
     in
-        [ adjustAngle (degrees 0.1) rayToStart
-        , adjustAngle (degrees -0.1) rayToStart
-        , adjustAngle (degrees 0.1) rayToEnd
-        , adjustAngle (degrees -0.1) rayToEnd
+        [ adjustAngle delta rayToStart
+        , adjustAngle (delta * -1) rayToStart
+        , adjustAngle delta rayToEnd
+        , adjustAngle (delta * -1) rayToEnd
         ]
 
 
