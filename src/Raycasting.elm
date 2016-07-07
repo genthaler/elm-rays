@@ -5,10 +5,10 @@ import Types exposing (..)
 import Vectors exposing (..)
 
 
-solveRays : Walls -> Position -> List Line
-solveRays walls rayStart =
+solveRays : Position -> Walls -> List Line
+solveRays position walls =
     walls
-        |> List.concatMap (toRays rayStart)
+        |> List.concatMap (toRays position)
         |> List.filterMap (curtail walls)
 
 

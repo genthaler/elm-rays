@@ -34,14 +34,16 @@ neighbours xs =
 
 drawRays : Walls -> Mouse.Position -> Svg msg
 drawRays walls position =
-    Raycasting.solveRays walls
-        { x = toFloat position.x
-        , y = toFloat position.y
-        }
-        |> List.sortBy (.vector >> .angle)
-        |> neighbours
-        |> List.map drawTriangle
-        |> g []
+    g []
+        (Raycasting.solveRays
+            { x = toFloat position.x
+            , y = toFloat position.y
+            }
+            walls
+            |> List.sortBy (.vector >> .angle)
+            |> neighbours
+            |> List.map drawTriangle
+        )
 
 
 drawWalls : Walls -> Svg msg
@@ -52,16 +54,23 @@ drawWalls walls =
 
 drawLine : Line -> Svg msg
 drawLine line =
-    Svg.line
-        [ x1 <| toString <| .x <| Vectors.start line
-        , y1 <| toString <| .y <| Vectors.start line
-        , x2 <| toString <| .x <| Vectors.end line
-        , y2 <| toString <| .y <| Vectors.end line
-        , stroke "black"
-        , strokeWidth "5"
-        , strokeLinecap "round"
-        ]
-        []
+    let
+        lineStart =
+            Vectors.start line
+
+        lineEnd =
+            Vectors.end line
+    in
+        Svg.line
+            [ x1 <| toString lineStart.x
+            , y1 <| toString lineStart.y
+            , x2 <| toString lineEnd.x
+            , y2 <| toString lineEnd.y
+            , stroke "black"
+            , strokeWidth "5"
+            , strokeLinecap "round"
+            ]
+            []
 
 
 drawTriangle : ( Line, Line ) -> Svg msg
@@ -71,16 +80,16 @@ drawTriangle ( a, b ) =
             toString point.x ++ "," ++ toString point.y
     in
         polygon
-            [ fill "#fce64e"
-            , stroke "#fce64e"
+            [ fill "gold"
+            , stroke "gold"
             , points
                 (String.join " "
                     <| List.map toPair
-                    <| [ Vectors.start a
-                       , Vectors.end a
-                       , Vectors.end b
-                       , Vectors.start b
-                       ]
+                        [ Vectors.start a
+                        , Vectors.end a
+                        , Vectors.end b
+                        , Vectors.start b
+                        ]
                 )
             ]
             []
