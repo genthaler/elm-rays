@@ -6,7 +6,7 @@ import Types exposing (..)
 import View.Svg
 
 
-root : Model -> Html Msg
+root : Model -> Html msg
 root model =
     div []
         [ case model.mouse of
