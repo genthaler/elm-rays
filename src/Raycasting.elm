@@ -64,7 +64,7 @@ intersect ray target =
                   )
 
         rayLength =
-            (wallStart.x - rayStart.x + (targetComponents.dx * targetLength))
+            (wallStart.x - rayStart.x + targetComponents.dx * targetLength)
                 / rayComponents.dx
     in
         if rayLength < 0 then
