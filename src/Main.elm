@@ -5,18 +5,19 @@ module Main exposing (main)
 @docs main
 -}
 
-import Html.App
+import Html
+import Types
 import State exposing (..)
 import View exposing (..)
 
 
 {-| Start the program running.
 -}
-main : Program Never
+main : Program Never Types.Model Types.Msg
 main =
-    Html.App.program
+    Html.program
         { init = ( State.initialModel, State.initialCmd )
-        , subscriptions = State.subscriptions
         , update = State.update
+        , subscriptions = State.subscriptions
         , view = View.root
         }
