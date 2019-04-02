@@ -1,6 +1,7 @@
-module Types exposing (Walls, Model, Msg(..))
+module Types exposing (Model, Msg(..), Walls)
 
-import Mouse
+import Browser.Events
+import Time
 import Vectors exposing (..)
 
 
@@ -10,9 +11,10 @@ type alias Walls =
 
 type alias Model =
     { walls : Walls
-    , mouse : Maybe Mouse.Position
+    , mouse : Maybe Position
     }
 
 
 type Msg
-    = Mouse Mouse.Position
+    = Mouse ( Int, Int )
+    | Tick Time.Posix

@@ -24,11 +24,11 @@ toRays position line =
         delta =
             degrees 0.1
     in
-        [ addToAngle delta rayToStart
-        , addToAngle (delta * -1) rayToStart
-        , addToAngle delta rayToEnd
-        , addToAngle (delta * -1) rayToEnd
-        ]
+    [ addToAngle delta rayToStart
+    , addToAngle (delta * -1) rayToStart
+    , addToAngle delta rayToEnd
+    , addToAngle (delta * -1) rayToEnd
+    ]
 
 
 curtail : Walls -> Line -> Maybe Line
@@ -67,9 +67,11 @@ intersect ray target =
             (wallStart.x - rayStart.x + targetComponents.dx * targetLength)
                 / rayComponents.dx
     in
-        if rayLength < 0 then
-            Nothing
-        else if targetLength < 0 || target.vector.length < targetLength then
-            Nothing
-        else
-            Just (withLength rayLength ray)
+    if rayLength < 0 then
+        Nothing
+
+    else if targetLength < 0 || target.vector.length < targetLength then
+        Nothing
+
+    else
+        Just (withLength rayLength ray)

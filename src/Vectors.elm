@@ -1,4 +1,4 @@
-module Vectors exposing (..)
+module Vectors exposing (Line, Position, Vector, addToAngle, components, end, lineBetween, start, vectorBetween, withLength)
 
 
 type alias Position =
@@ -30,9 +30,9 @@ end line =
         ( dx, dy ) =
             fromPolar ( line.vector.length, line.vector.angle )
     in
-        { x = line.position.x + dx
-        , y = line.position.y + dy
-        }
+    { x = line.position.x + dx
+    , y = line.position.y + dy
+    }
 
 
 lineBetween : Position -> Position -> Line
@@ -51,9 +51,9 @@ vectorBetween p1 p2 =
         dy =
             p2.y - p1.y
     in
-        { length = sqrt (dx ^ 2 + dy ^ 2)
-        , angle = atan2 dy dx
-        }
+    { length = sqrt (dx ^ 2 + dy ^ 2)
+    , angle = atan2 dy dx
+    }
 
 
 addToAngle : Float -> Line -> Line
@@ -62,7 +62,7 @@ addToAngle delta line =
         vector =
             line.vector
     in
-        { line | vector = { vector | angle = vector.angle + delta } }
+    { line | vector = { vector | angle = vector.angle + delta } }
 
 
 components : Line -> { dx : Float, dy : Float }
@@ -78,4 +78,4 @@ withLength length line =
         vector =
             line.vector
     in
-        { line | vector = { vector | length = length } }
+    { line | vector = { vector | length = length } }

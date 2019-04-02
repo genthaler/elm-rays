@@ -1,9 +1,12 @@
-module State exposing (..)
+module State exposing (initialCmd, initialModel, subscriptions, update)
 
-import Mouse
+import Basics.Extra exposing (uncurry)
+import Browser.Events
+import Json.Decode as D
 import Platform.Cmd as Cmd
 import Platform.Sub as Sub
 import Types exposing (..)
+import Vectors exposing (..)
 
 
 initialModel : Model
@@ -33,11 +36,24 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Mouse mouse ->
-            ( { model | mouse = Just mouse }
+            ( { model | mouse = Just <| uncurry Vectors.Position <| Tuple.mapBoth toFloat toFloat mouse }
             , Cmd.none
             )
+
+        Tick tick ->
+            ( model, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    Mouse.moves Mouse
+    Sub.batch [ Browser.Events.onMouseMove (D.map Mouse <| D.map2 Tuple.pair pageX pageY), Browser.Events.onAnimationFrame Tick ]
+
+
+pageX : D.Decoder Int
+pageX =
+    D.field "pageX" D.int
+
+
+pageY : D.Decoder Int
+pageY =
+    D.field "pageY" D.int

@@ -1,7 +1,6 @@
 module View.Svg exposing (root)
 
 import Html exposing (Html)
-import Mouse
 import Raycasting
 import String
 import Svg exposing (..)
@@ -10,7 +9,7 @@ import Types exposing (..)
 import Vectors exposing (..)
 
 
-root : Walls -> Mouse.Position -> Html msg
+root : Walls -> Vectors.Position -> Html msg
 root walls position =
     svg
         [ width "600"
@@ -24,7 +23,7 @@ root walls position =
 
 neighbours : List a -> List ( a, a )
 neighbours xs =
-    List.map2 (,)
+    List.map2 (\a b -> ( a, b ))
         xs
         ((xs ++ xs)
             |> List.tail
@@ -32,12 +31,12 @@ neighbours xs =
         )
 
 
-drawRays : Walls -> Mouse.Position -> Svg msg
-drawRays walls position =
+drawRays : Walls -> Vectors.Position -> Svg msg
+drawRays walls { x, y } =
     g []
         (Raycasting.solveRays
-            { x = toFloat position.x
-            , y = toFloat position.y
+            { x = x
+            , y = y
             }
             walls
             |> List.sortBy (.vector >> .angle)
@@ -61,46 +60,46 @@ drawLine line =
         lineEnd =
             Vectors.end line
     in
-        Svg.line
-            [ x1 (toString lineStart.x)
-            , y1 (toString lineStart.y)
-            , x2 (toString lineEnd.x)
-            , y2 (toString lineEnd.y)
-            , stroke "black"
-            , strokeWidth "5"
-            , strokeLinecap "round"
-            ]
-            []
+    Svg.line
+        [ x1 (String.fromFloat lineStart.x)
+        , y1 (String.fromFloat lineStart.y)
+        , x2 (String.fromFloat lineEnd.x)
+        , y2 (String.fromFloat lineEnd.y)
+        , stroke "black"
+        , strokeWidth "5"
+        , strokeLinecap "round"
+        ]
+        []
 
 
 drawTriangle : ( Line, Line ) -> Svg msg
 drawTriangle ( a, b ) =
     let
         formatPoint point =
-            toString point.x ++ "," ++ toString point.y
+            String.fromFloat point.x ++ "," ++ String.fromFloat point.y
     in
-        polygon
-            [ fill "gold"
-            , stroke "gold"
-            , points
-                (String.join " "
-                    (List.map formatPoint
-                        [ Vectors.start a
-                        , Vectors.end a
-                        , Vectors.end b
-                        , Vectors.start b
-                        ]
-                    )
+    polygon
+        [ fill "gold"
+        , stroke "gold"
+        , points
+            (String.join " "
+                (List.map formatPoint
+                    [ Vectors.start a
+                    , Vectors.end a
+                    , Vectors.end b
+                    , Vectors.start b
+                    ]
                 )
-            ]
-            []
+            )
+        ]
+        []
 
 
-drawCursor : Mouse.Position -> Svg msg
-drawCursor position =
+drawCursor : Vectors.Position -> Svg msg
+drawCursor { x, y } =
     circle
-        [ cx (toString position.x)
-        , cy (toString position.y)
+        [ cx (String.fromFloat x)
+        , cy (String.fromFloat y)
         , r "5"
         , fill "red"
         ]
