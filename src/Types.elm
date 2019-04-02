@@ -17,4 +17,3 @@ type alias Model =
 
 type Msg
     = Mouse ( Int, Int )
-    | Tick Time.Posix

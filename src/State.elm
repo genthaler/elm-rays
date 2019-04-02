@@ -40,13 +40,10 @@ update msg model =
             , Cmd.none
             )
 
-        Tick tick ->
-            ( model, Cmd.none )
-
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    Sub.batch [ Browser.Events.onMouseMove (D.map Mouse <| D.map2 Tuple.pair pageX pageY), Browser.Events.onAnimationFrame Tick ]
+    Browser.Events.onMouseMove (D.map Mouse <| D.map2 Tuple.pair pageX pageY)
 
 
 pageX : D.Decoder Int
